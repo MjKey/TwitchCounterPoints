@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>TPCounter by MjKey</title>
+
+    <style>
+        body{
+            background-image: url('http://w4.wallls.com/uploads/original/201810/06/wallls.com_207580.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+        .content {
+            width: 600px;
+            margin: 0 auto;
+            margin-top: 6%;
+        }
+        .table_dark {
+            font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+            font-size: 14px;
+            text-align: left;
+            border-collapse: collapse;
+            background: #252F48;
+            margin: 10px auto;
+          }
+          .table_dark th {
+            color: #EDB749;
+            border-bottom: 1px solid #37B5A5;
+            padding: 12px 17px;
+          }
+          .table_dark td {
+            color: #CAD4D6;
+            border-bottom: 1px solid #37B5A5;
+            border-right:1px solid #37B5A5;
+            padding: 7px 17px;
+          }
+          .table_dark tr:last-child td {
+            border-bottom: none;
+          }
+          .table_dark td:last-child {
+            border-right: none;
+          }
+    </style>
+</head>
+<body>
+
+    <div class="content">
+        <table id="mytable" class="table_dark">
+            <thead>
+                <tr>
+                    <td align="center" id="allP" colspan="2"></td>
+                </tr>
+                <tr>
+                    <th onclick="sort_name();">SORT NICK</th>
+                    <th onclick="sort_age();">SORT POINTS</th>
+                </tr>
+            </thead>
+            <tbody id="table1">
+            </tbody>
+            <input type="hidden" id="nick_order" value="asc">
+            <input type="hidden" id="point_order" value="asc">
+        </table>
+    </div>
+    <!--Скрипты-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        /*$.ajax({  
+            url: 'http://play.mjkey.ru/data.json',  
+            dataType: "json",  
+            success:function(date){
+                let a = date['allPoints']
+                $('#allP').text("Всего потрачено: " + a)
+                var tr;
+                for (var i = 0; i < date.length; i++) {
+                    tr = $('<tr/>');
+                    tr.append("<td>" + date[i].nick + "</td>");
+                    tr.append("<td>" + date[i].points + "</td>");
+                    $('table').append(tr);
+                }
+            }  
+          }); */
+          $(document).ready(function() {
+
+            function update_data() {
+                $.getJSON('http://dextbot.tk/twitch/data.json', function(json_data){
+                    $('#allP').text(json_data['allPoints'])
+                    $('tbody').empty();
+                    $.each(json_data['users'], function(i, item) {
+                        var $tr = $('<tr>').append(
+                            $('<td>').text(item.nick),
+                            $('<td id="hui">').text(item.points),
+                        );
+                        $('tbody').append("<tr>"+ $tr.wrap('<p>').html() + "</tr>");
+                    });
+                });
+                return false;
+            }
+            update_data();
+            var interval = setInterval(update_data, 60000);
+        });
+        function sort_name()
+{
+ var table=$('#mytable');
+ var tbody =$('#table1');
+
+ tbody.find('tr').sort(function(a, b) 
+ {
+  if($('#nick_order').val()=='asc') 
+  {
+   return $('td:first', a).text().localeCompare($('td:first', b).text());
+  }
+  else 
+  {
+   return $('td:first', b).text().localeCompare($('td:first', a).text());
+  }
+		
+ }).appendTo(tbody);
+	
+ var sort_order=$('#nick_order').val();
+ if(sort_order=="asc")
+ {
+  document.getElementById("nick_order").value="desc";
+ }
+ if(sort_order=="desc")
+ {
+  document.getElementById("nick_order").value="asc";
+ }
+}
+
+function sort_age() 
+{
+ var table=$('#mytable');
+ var tbody =$('#table1');
+
+ tbody.find('tr').sort(function(a, b) 
+ {
+  if($('#point_order').val()=='asc') 
+  {
+   return $('td:last', a).text().localeCompare($('td:last', b).text());
+  }
+  else 
+  {
+   return $('td:last', b).text().localeCompare($('td:last', a).text());
+  }
+		
+ }).appendTo(tbody);
+	
+ var sort_order=$('#point_order').val();
+ if(sort_order=="asc")
+ {
+  document.getElementById("point_order").value="desc";
+ }
+ if(sort_order=="desc")
+ {
+  document.getElementById("point_order").value="asc";
+ }
+}
+    </script>
+</body>
