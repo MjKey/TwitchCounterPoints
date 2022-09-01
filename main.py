@@ -13,9 +13,9 @@ token = input("Введи токен: ")
 accid = input("Введи ID акаунта: ")
 logg = input('Включить логи в консоли? (1 - да): ') or "0"
 # Fill Required Information
-HOSTNAME = "s221138.hostiman.com"
-USERNAME = "mjkey_dex"
-PASSWORD = "123123"
+HOSTNAME = ""
+USERNAME = ""
+PASSWORD = ""
 
 # Connect FTP Server
 ftp_server = ftplib.FTP(HOSTNAME, USERNAME, PASSWORD)
